@@ -1,0 +1,22 @@
+{
+    "name": "brayun/yii2-ucpaas",
+    "description": "ucpaas",
+    "type": "library",
+    "keywords": ["yii2","extension","ucpaas"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ethan",
+            "email": "ethan@brayun.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "brayun\\ucpaas\\": ""
+        }
+    }
+}
