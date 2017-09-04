@@ -66,7 +66,7 @@ class Ucpaas extends Component
      * @param string $cityId 城市区号，dstVirtualNum号码归属 城市Id格式为 0086+去零区号比如北京0086755
      * @return mixed
      */
-    public function bindVirPhone($caller, $callee, $dstVirtualNum, $bindId, $record = 1, $cityId = '0086021', $maxAge = 300, $callerRingName = '', $calleeRingName = '', $requestId = '', $statusUrl = '', $hangupUrl = '', $recordUrl = '')
+    public function bindVirPhone($caller, $callee, $dstVirtualNum, $bindId, $record = 1, $cityId = '008621', $maxAge = 300, $callerRingName = '', $calleeRingName = '', $requestId = '', $statusUrl = '', $hangupUrl = '', $recordUrl = '')
     {
         $res = $this->request('applyNumber', 'POST', [
             'caller' => '0086'.$caller,
@@ -78,6 +78,45 @@ class Ucpaas extends Component
             'maxAge' => $maxAge,
             'cityId' => $cityId,
             'requestId' => $requestId,
+            'record' => $record,
+            'statusUrl' => $statusUrl,
+            'hangupUrl' => $hangupUrl,
+            'recordUrl' => $recordUrl
+        ]);
+        $response = (array)json_decode($res);
+        return $response;
+    }
+
+
+    /**
+     * 绑定自动分配AXB
+     * @param string $caller 主叫号码  必须为11位手机号，号码前加0086如008613631686024
+     * @param string $callee 被叫号码  必须为11位手机号，号码前加0086如008615031686024
+     * @param string $bindId 绑定id，客户方平台保证唯一
+     * @param int $maxAllowTime
+     * @param int $record 字符串最大长度不超过128字节，该requestId在后面话单和录音URL推送中原样带回
+     * @param string $cityId 城市区号，dstVirtualNum号码归属 城市Id格式为 0086+去零区号比如北京0086755
+     * @param integer $maxAge 主被叫+虚拟保护号码允许合作方最大cache存储时间(单位秒) 默认绑定为1800/S 最大无上限
+     * @param string $callerRingName 主叫呼入时播放IVR语音文件名
+     * @param string $calleeRingName 被叫呼入时播放IVR语音文件名
+     * @param string $requestId 字符串最大长度不超过128字节，该requestId在后面话单和录音URL推送中原样带回
+     * @param string $statusUrl 状态回调通知地址，正式环境可以配置默认推送地址
+     * @param string $hangupUrl 话单推送地址，不填推到默认协商地址
+     * @param string $recordUrl 录单URL回调通知地址，不填推到默认协商地址
+     * @return mixed
+     */
+    public function bindPhone($caller, $callee, $bindId, $maxAllowTime = 10, $record = 1, $cityId = '008621', $maxAge = 300, $callerRingName = '', $calleeRingName = '', $requestId = '', $statusUrl = '', $hangupUrl = '', $recordUrl = '')
+    {
+        $res = $this->request('allocNumber', 'POST', [
+            'caller' => '0086'.$caller,
+            'callee' => '0086'.$callee,
+            'callerRingName' => $callerRingName,
+            'calleeRingName' => $calleeRingName,
+            'bindId' => $bindId,
+            'maxAge' => $maxAge,
+            'cityId' => $cityId,
+            'requestId' => $requestId,
+            'maxAllowTime' => $maxAllowTime,
             'record' => $record,
             'statusUrl' => $statusUrl,
             'hangupUrl' => $hangupUrl,
